@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Qwitcher+Grypen:wght@700&display=swap" rel="stylesheet">
+      <link rel="stylesheet" href="index.css">
+      <title>Copy to Copy</title>
+    </head>
+    <body>
+        <header>
+            <div class="logo">Copy to Copy</div>
+            <div>
+                <ul>
+                    <li><a href="#">home</a></li>
+                    <li><a href="#">about</a></li>
+                </ul>
+            </div>
+
+        </header>
+       <main>
+       <div class="user-form">
+            <div class="form-container" id="registration-form">
+                <form method="post" action="">
+                    <input type="text" class="input" name="username" placeholder="Create the New ID :" required>
+                    <input type="submit" class="input"  name="register" value="Create">
+                </form>
+            </div>
+            <div class="form-container" id="login-form">
+                <form method="post" action="">
+                    <input type="text" class="input"  name="username" placeholder="Recived the ID :" required>
+                    <input type="submit" class="input"  name="login" value="Open">
+                </form>
+            </div>
+            <div class="wave">
+                <!--    <img src="waves.svg" viewBox="0 0 1200 120" preserveAspectRatio="none"></img> -->
+            </div>
+        </div>
+
+        <div class="form-container" id="upload-form">
+            <form method="post" action="" enctype="multipart/form-data">
+                <?php if (isset($_SESSION['user_id'])): ?>
+                    <div id="hid-content"  >
+                        <div class="uploadBox">
+                            <label for="input-file" id="drop-area">
+                                <input type="file" name="file" id="input-file" hidden>
+                                <div id="img-view">
+                                    <p>Drag and drop or click here <br> to upload File </p>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                <?php endif; ?>
+
+                <div class="btn">
+                <button class="Btn" type="submit" value="Upload File" name="upload_file">
+                    <img class="upload" src="./pic/upload.svg" alt="arrow-down" />
+                    <span class="icon"></span>
+                    Upload
+                </button>
+
+                <button class="Btn" type="button">
+                    <img class="refresh" src="./pic/refresh.svg" alt="arrow-down" />
+                    Refresh
+                </button>
+
+                <button class="Btn" type="button" id="editBtn" >
+                    <img class="edit" src="./pic/edit.svg" alt="arrow-down" />
+                    <span class="icon2"></span>
+                    Edit
+                </button>
+
+                <button class="Btn" type="submit" name="delete" id="deleteBtn">
+                    <img class="delete" src="./pic/delete.svg" alt="arrow-down" />
+                    <span class="icon2"></span>
+                    Delete
+                </button>
+                <input type="hidden" name="file_id" id="file_id">
+                </div> 
+            </form>
+        </div> 
+
+        <div class="table-container">
+            <h2>Uploaded Files</h2>
+            <div class="table-wrapper">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th >Filename</th>
+                            <th >Filesize</th>
+                            <th>Filetype</th>
+                            <th>Download</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php if (!empty($uploaded_files)): ?>
+                        <?php foreach ($uploaded_files as $file): ?>
+                        <tr data-id="<?php echo $file['id']; ?>" data-filename="<?php echo htmlspecialchars($file['filename']); ?>">
+                            <td class="filename"><?php echo htmlspecialchars($file['filename']); ?></td>
+                            <td><?php echo number_format($file['filesize'] / (1024 * 1024), 2); ?> MB</td>
+                            <td class="filetypes"><?php echo htmlspecialchars($file['filetype']); ?></td>
+                            <td><a href="uploads/<?php echo urlencode($file['filename']); ?>" class="downloadBtn" download>
+                                <span class="button__text">Download</span>
+                                <span class="button__icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 35 35" id="bdd05811-e15d-428c-bb53-8661459f9307" data-name="Layer 2" class="svg">
+                                        <path d="M17.5,22.131a1.249,1.249,0,0,1-1.25-1.25V2.187a1.25,1.25,0,0,1,2.5,0V20.881A1.25,1.25,0,0,1,17.5,22.131Z"></path>
+                                        <path d="M17.5,22.693a3.189,3.189,0,0,1-2.262-.936L8.487,15.006a1.249,1.249,0,0,1,1.767-1.767l6.751,6.751a.7.7,0,0,0,.99,0l6.751-6.751a1.25,1.25,0,0,1,1.768,1.767l-6.752,6.751A3.191,3.191,0,0,1,17.5,22.693Z"></path>
+                                        <path d="M31.436,34.063H3.564A3.318,3.318,0,0,1,.25,30.749V22.011a1.25,1.25,0,0,1,2.5,0v8.738a.815.815,0,0,0,.814.814H31.436a.815.815,0,0,0,.814-.814V22.011a1.25,1.25,0,1,1,2.5,0v8.738A3.318,3.318,0,0,1,31.436,34.063Z"></path>
+                                    </svg>
+                                </span>
+                                </a>
+                            </td>
+                        </tr>
+                        <?php endforeach; ?>
+                        <?php else: ?>
+                        <tr>
+                            <td colspan="4">No files uploaded yet.</td>
+                        </tr>
+                        <?php endif; ?>
+                    </tbody>
+                </table>
+            </div>
+
+            <?php if (isset($_SESSION['user_id'])): ?>
+                <div class="logout">
+                    <a class="box" href="?logout=true">Logout !</a>
+                </div>
+            <?php endif; ?>
+        </div>
+       </main>
+        <footer>
+            <!-- <div class="social_media">
+                <a href="#" class="socialContainer One">
+                    <img class="socialSvg instagramSvg" viewBox="0 0 16 16" id="insta" src="./pic/instagram.png" alt="insta" />
+                </a>
+                <a href="#" class="socialContainer Two">
+                    <img class="socialSvg twitterSvg" viewBox="0 0 16 16" id="linked" src="./pic/linkedin.png" alt="linked" />
+                </a>
+                <a href="#" class="socialContainer Three">
+                    <img class="socialSvg linkdinSvg" viewBox="0 0 448 512" id="twitter" src="./pic/twitter.png" alt="twitter" />
+                </a>
+                <a href="#" class="socialContainer Four">
+                    <img class="socialSvg whatsappSvg" viewBox="0 0 16 16" id="FB" src="./pic/facebook.png" alt="Fb" />
+                </a>
+            </div> -->
+        </footer> 
+    <script type="text/javascript" src="index.js">
+        
+    </script>
+
+   </body>
+
+</html>
