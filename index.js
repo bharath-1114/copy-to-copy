@@ -34,6 +34,20 @@ inputLength.addEventListener("keyup", function() {
         message.style.display = "none";
     } else {
         message.style.display = "block";
+        (function formatSize() {
+            const cells = document.querySelectorAll("td[data-bytes]");
+            for (const cell of cells) {
+              const bytes = Number(cell.getAttribute("data-bytes"));
+              if (Number.isNaN(bytes)) continue;
+
+              const units = ["B", "KB", "MB", "GB"];
+              let value = bytes;
+              let unitIndex = 0;
+
+              while (value >= 1024 && unitIndex < units.length - 1) {
+                value /= 1024;
+                unitIndex += 1;
+              }  
     }
 });
 //-----------------*****************-------------------------------------//
@@ -305,3 +319,7 @@ contactForm.addEventListener("submit", (e) => {
 });
 
 //-----------------*****************-------------------------------------//
+
+    cell.textContent = `${value.toFixed(unitIndex === 0 ? 0 : 2)} ${units[unitIndex]}`;
+  }
+})();
